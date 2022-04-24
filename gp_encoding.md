@@ -22,7 +22,7 @@ Gpinisystem may have a bug, setting locale option doesn’t work, we can change 
 
 	In PostgresMain function, it will call the below function to transform the insert data from client encoding to server encoding.
 
-	`pstring = pg_client_to_server(pbuf.data, plength);`
+		pstring = pg_client_to_server(pbuf.data, plength);
 
 - Query data from database
 
@@ -35,12 +35,12 @@ If you use the psql and set the client_encoding which is different from the psql
 
 psql encoding is UTF8 , client encoding is gbk and server_endcoding is UTF8
 
-![encoding1](/fanfuxiaoran.github.io/images/encoding1)
+![encoding1](/fanfuxiaoran.github.io/images/encoding/encoding1)
 
 When the client_encoding is 'UTF8', Why the output is not correct?
 
 Let’s first check how does the "浣犲ソ” come from? The follwing python code can help
-	`
+
 	str = "你好";
 	str_utf8 = str.encode("UTF-8")
 	str_gbk = str.encode("GBK")
@@ -49,17 +49,17 @@ Let’s first check how does the "浣犲ソ” come from? The follwing python co
 	print("utf 编码", str_utf8)
 	print("gbk 编码", str_gbk)
 	print("utf2gpk：", str_utf8.decode('GBK','strict'))
-	`
+	
 The out put is
-	`
+
 	你好
 	utf 编码 b’\xe4\xbd\xa0\xe5\xa5\xbd’
 	gbk 编码 b’\xc4\xe3\xba\xc3'
 	utf2gpk： 浣犲ソ
-	`
+
 "你好"'s UTF8 encoding is the same as the "浣犲ソ" gbk encoding.
 
-![encoding2](/fanfuxiaoran.github.io/images/encoding2)
+![encoding2](/fanfuxiaoran.github.io/images/encoding/encoding2)
 
 Actually, the binary in the test table is not "你好"'s UTF-8 encoding, but is "浣犲ソ"'s UTF-8 encoding. 
 
@@ -76,25 +76,23 @@ where does the transform happen？
 The encoding transform is done in formatter. In the csv and text formatter, the function "pg_any_to_server" is called ( in CopyReadLine function,copy.c)
 
 ## Jsonb cannot handle the unicode above 0x7f when server encoding is not utf-8
-`
 
-server_encoding
-
------------------
-
-LATIN1
-
-
-
-select jsonb '{ "a":  "\ud83d\ude04\ud83d\udc36" }' ->> 'a';
-
-ERROR:  unsupported Unicode escape sequence
-
-LINE 1: select jsonb '{ "a":  "\ud83d\ude04\ud83d\udc36" }' ->> 'a';
-
-DETAIL:  Unicode escape values cannot be used for code point values above 007F when the server encoding is not UTF8.
-
-CONTEXT:  JSON data, line 1: { "a":...
-`
+	server_encoding
+	
+	-----------------
+	
+	LATIN1
+	
+	
+	
+	select jsonb '{ "a":  "\ud83d\ude04\ud83d\udc36" }' ->> 'a';
+	
+	ERROR:  unsupported Unicode escape sequence
+	
+	LINE 1: select jsonb '{ "a":  "\ud83d\ude04\ud83d\udc36" }' ->> 'a';
+	
+	DETAIL:  Unicode escape values cannot be used for code point values above 007F when the server encoding is not UTF8.
+	
+	CONTEXT:  JSON data, line 1: { "a":...
 
 
