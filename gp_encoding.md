@@ -1,4 +1,4 @@
-# gpdb encoding issues
+# gpdb encoding 
 ## client_encoding && server_encoding 
 
 client_encoding is a GUC, you can change it in a session.
@@ -59,7 +59,7 @@ The out put is
 
 "你好"'s UTF8 encoding is the same as the "浣犲ソ" gbk encoding.
 
-![encoding2](images/encoding/encoding2)
+![encoding2](doc/images/encoding/encoding2)
 
 Actually, the binary in the test table is not "你好"'s UTF-8 encoding, but is "浣犲ソ"'s UTF-8 encoding. 
 
