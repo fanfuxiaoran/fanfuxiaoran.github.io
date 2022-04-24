@@ -12,9 +12,9 @@ Gpinisystem may have a bug, setting locale option doesn’t work, we can change 
 
 - Modify demo-cluster.sh as below: 
 
-	`ENCODING=LATIN1
+	ENCODING = LATIN1
 
-	LOCALE_SETTING=en_NZ.ISO8859-1`
+	LOCALE_SETTING = en_NZ.ISO8859-1
 
 ### How about when client_encoding and server_encoding are different
 
