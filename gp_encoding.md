@@ -16,7 +16,7 @@ Gpinisystem may have a bug, setting locale option doesn’t work, we can change 
 
 	LOCALE_SETTING = en_NZ.ISO8859-1
 
-### How about when client_encoding and server_encoding are different
+### client_encoding and server_encoding are different
 
 - Insert data into database:
 
@@ -35,7 +35,7 @@ If you use the psql and set the client_encoding which is different from the psql
 
 psql encoding is UTF8 , client encoding is gbk and server_endcoding is UTF8
 
-![encoding1](/fanfuxiaoran.github.io/images/encoding/encoding1)
+![encoding1](doc/images/encoding/encoding1)
 
 When the client_encoding is 'UTF8', Why the output is not correct?
 
@@ -59,7 +59,7 @@ The out put is
 
 "你好"'s UTF8 encoding is the same as the "浣犲ソ" gbk encoding.
 
-![encoding2](/fanfuxiaoran.github.io/images/encoding/encoding2)
+![encoding2](images/encoding/encoding2)
 
 Actually, the binary in the test table is not "你好"'s UTF-8 encoding, but is "浣犲ソ"'s UTF-8 encoding. 
 
