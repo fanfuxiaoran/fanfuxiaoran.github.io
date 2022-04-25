@@ -1,6 +1,6 @@
 # The Internal of Pgbouncer
 ## Overviews of pools
-![pgbouncer1](doc/images/pgbouncerpgbouncer//pgbouncer1)
+![pgbouncer1](doc/images/pgbouncer/pgbouncer1)
 
 A pool is a set of connections to the same database for a given user. There may be many pools in a pgbouncer server. As the above picture shows, there are 3 different pools: db1/user1, db2/user2 and db2/user1.
 
@@ -112,17 +112,17 @@ In the above config, when pgbouncer connects to database p0, as it doesn’t con
 - loader.c: load parameters from pgbouncer.ini and userlist.txt
 - pooler.c: handle pgbouncer listening sockets
 - client.c: handle client connection
-	    - client_proto: start to process the data readed from the client socket.
-            - handle_client_startup: if client state is cl_login call this function to process socket data
-            - handle_client_work: if client state is cl_active, call this function to process socket data
-	    - start_auth_request: if client uses auth_query to get user password, call this function to execute the auth_query
-	    - Handle_auth_response：called by server.c after geting the response of the auth_query(sent by start_auth_requset) . Parse the username and password from the response.
-            - Send_client_authreq: send auth request to client to ask password from client. (refers to Postgres on the wire - A look at the PostgreSQL wire protocol)
+  - client_proto: start to process the data readed from the client socket.
+  - handle_client_startup: if client state is cl_login call this function to process socket data
+  - handle_client_work: if client state is cl_active, call this function to process socket data
+  - start_auth_request: if client uses auth_query to get user password, call this function to execute the auth_query
+  - handle_auth_response：called by server.c after geting the response of the auth_query(sent by start_auth_requset) . Parse the username and password from the response.
+  - send_client_authreq: send auth request to client to ask password from client. (refers to Postgres on the wire - A look at the PostgreSQL wire protocol)
 
 - server.c
-	    - Server_proto: start to process the data reader from the server socket
-            - Handle_server_startup: when sever socket state is sv_login
-            - Handle_server_work：when sever socket state is sv_active, sv_dle, sv_used, sv_tested
+  - server_proto: start to process the data reader from the server socket
+  - handle_server_startup: when sever socket state is sv_login
+  - handle_server_work：when sever socket state is sv_active, sv_dle, sv_used, sv_tested
 - sbuf.c: stream buffer. Can use it to copy data from client socket to server socket, or sever socket to client socket.
 - objects.c: A lot of functions in it.
 - Janitor.c:  Periodic called, it maintains the client connection and server connection, change thier states and put them into different queues.
