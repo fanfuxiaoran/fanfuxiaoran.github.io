@@ -12,9 +12,11 @@ Gpinisystem may have a bug, setting locale option doesn’t work, we can change 
 
 - Modify demo-cluster.sh as below: 
 
+	```
 	ENCODING = LATIN1
-
+	
 	LOCALE_SETTING = en_NZ.ISO8859-1
+	```
 
 ### client_encoding and server_encoding are different
 
@@ -22,7 +24,7 @@ Gpinisystem may have a bug, setting locale option doesn’t work, we can change 
 
 	In PostgresMain function, it will call the below function to transform the insert data from client encoding to server encoding.
 
-		pstring = pg_client_to_server(pbuf.data, plength);
+	`pstring = pg_client_to_server(pbuf.data, plength);`
 
 - Query data from database
 
