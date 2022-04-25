@@ -1,6 +1,6 @@
 # The Internal of Pgbouncer
 ## Overviews of pools
-![pgbouncer1](doc/images/pgbouncer1)
+![pgbouncer1](doc/images/pgbouncerpgbouncer//pgbouncer1)
 
 A pool is a set of connections to the same database for a given user. There may be many pools in a pgbouncer server. As the above picture shows, there are 3 different pools: db1/user1, db2/user2 and db2/user1.
 
@@ -26,7 +26,7 @@ Client and server socket both have their own status. pgbouncer uses several stat
 
 ## Client and server connection
 Client state diagram 
-![pgbouncer2](doc/images/pgbouncer2)
+![pgbouncer2](doc/images/pgbouncer/pgbouncer2)
 
 - CL_LOGIN: client is doing login into pgbouncer. A client logins into to pgbouncer based on the auth_type.
 - CL_ACTIVE: client has successfully login into pgbouncer
@@ -35,7 +35,7 @@ Client state diagram
 - CL_JUSTGREE：a client connection is disconnected
 
 Server state diagram
-![pgbouncer3](doc/images/pgbouncer3)
+![pgbouncer3](doc/images/pgbouncer/pgbouncer3)
 
 - SV_LOGIN: server is doing login into database server
 - SV_IDLE: server connection has successfully logged into database server and the connection is not used by any client connection
@@ -66,7 +66,7 @@ The following iterms are related to authentication:
 
 if auth type is md5、scram-sha-256 or plain, pgbouncer needs to check user name and password.
 There are 2 ways for pgbouncer to get user name and password
-![pgbouncer4](doc/images/pgbouncer4)
+![pgbouncer4](doc/images/pgbouncer/pgbouncer4)
 
 1. Auth_file
 
@@ -129,5 +129,5 @@ In the above config, when pgbouncer connects to database p0, as it doesn’t con
 
 References:
 1. Postgres on the wire - A look at the PostgreSQL wire protocol
-2. [link1](https://heap.io/blog/engineering/decrypting-pgbouncers-diagnostic-information)
-3. [link2](https://www.cybertec-postgresql.com/en/pgbouncer-authentication-made-easy/)
+2. https://heap.io/blog/engineering/decrypting-pgbouncers-diagnostic-information
+3. https://www.cybertec-postgresql.com/en/pgbouncer-authentication-made-easy/
