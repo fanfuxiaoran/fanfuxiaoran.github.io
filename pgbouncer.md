@@ -129,5 +129,5 @@ In the above config, when pgbouncer connects to database p0, as it doesn’t con
 
 References:
 1. Postgres on the wire - A look at the PostgreSQL wire protocol
-2. https://heap.io/blog/engineering/decrypting-pgbouncers-diagnostic-information
-3. https://www.cybertec-postgresql.com/en/pgbouncer-authentication-made-easy/
+2. [link1](https://heap.io/blog/engineering/decrypting-pgbouncers-diagnostic-information)
+3. [link2](https://www.cybertec-postgresql.com/en/pgbouncer-authentication-made-easy/)
