@@ -38,6 +38,7 @@ PostgreSQL提供了一套frame使postgres可以启动单独后台进程跑用户
 
   BackgroundWorker 主要记录bgworker函数入口，flags, bgworker 重启策略等
   RegisteredBgWorker, 在BackgroundWorker外面包一层，记录其对应的pid,状态等
+ 
 ```
 typedef struct RegisteredBgWorker
 {
