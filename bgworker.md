@@ -43,25 +43,24 @@ PostgreSQL提供了一套frame使postgres可以启动单独后台进程跑用户
 typedef struct RegisteredBgWorker
 {
 
-      BackgroundWorker rw_worker; /* its registry entry */
-
-      struct bkend *rw_backend;       /* its BackendList entry, or NULL */
-
-      pid_t           rw_pid;                 /* 0 if not running */
-
-      int                     rw_child_slot;
-
-      TimestampTz rw_crashed_at;      /* if not 0, time it last crashed */
-
-      int                     rw_shmem_slot;
-
-      bool            rw_terminate;
-
-      slist_node      rw_lnode;               /* list link */
+	BackgroundWorker rw_worker; /* its registry entry */
+	
+	struct bkend *rw_backend;       /* its BackendList entry, or NULL */
+	
+	pid_t           rw_pid;                 /* 0 if not running */
+	
+	int                     rw_child_slot;
+	
+	TimestampTz rw_crashed_at;      /* if not 0, time it last crashed */
+	
+	int                     rw_shmem_slot;
+	
+	bool            rw_terminate;
+	
+	slist_node      rw_lnode;               /* list link */
 
 } RegisteredBgWorker;
 ```
-  
   
 - BackgroundWorkerArray
   和BackgroundWorkerList类似，是一个列表，但在Shared memory中,它的node是BackgroundWorkerSlot
@@ -77,9 +76,7 @@ typedef struct BackgroundWorkerArray
         BackgroundWorkerSlot slot[FLEXIBLE_ARRAY_MEMBER]; 
 
 } BackgroundWorkerArray; 
-```
 
-```
 typedef struct BackgroundWorkerSlot
 {
         bool            in_use;
