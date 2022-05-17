@@ -59,6 +59,7 @@ typedef struct RegisteredBgWorker
 	slist_node      rw_lnode;               /* list link */
 
 } RegisteredBgWorker;
+
   ```
   
   
@@ -68,6 +69,7 @@ typedef struct RegisteredBgWorker
   BackgroundWorkerSlot 同样是对BackgroundWorker的包装，记录pid以及是否terminate等信息
 
 ```
+
 typedef struct BackgroundWorkerArray 
 { 
 
@@ -76,8 +78,11 @@ typedef struct BackgroundWorkerArray
         BackgroundWorkerSlot slot[FLEXIBLE_ARRAY_MEMBER]; 
 
 } BackgroundWorkerArray; 
+
 ```
+
 ```
+
 typedef struct BackgroundWorkerSlot
 {
         bool            in_use;
@@ -86,6 +91,7 @@ typedef struct BackgroundWorkerSlot
         uint64          generation;             /* incremented when slot is recycled */
         BackgroundWorker worker;
 } BackgroundWorkerSlot;
+
 ```
  
 BackgroundWorkerList 和 BackgroundWorkerArray 看着很类似，为什么要使用两个类似的数据结构呢？
