@@ -32,33 +32,33 @@ PostgreSQL提供了一套frame使postgres可以启动单独后台进程跑用户
 
 ### 重要的数据结构
 
-- BackgroundWorkerList  RegisteredBgWorker的list,记录bgworker的列表
+- BackgroundWorkerList 一个 RegisteredBgWorker的list,记录bgworker的列表
 
   BackgroundWorkerList 是postmaster进程私有数据，其他进程看不到。
 
   BackgroundWorker 主要记录bgworker函数入口，flags, bgworker 重启策略等
   RegisteredBgWorker, 在BackgroundWorker外面包一层，记录其对应的pid,状态等
-  ```
-  typedef struct RegisteredBgWorker
-  {
-  
-	BackgroundWorker rw_worker; /* its registry entry */
- 
- 	struct bkend *rw_backend;       /* its BackendList entry, or NULL */
- 
- 	pid_t           rw_pid;                 /* 0 if not running */
- 
- 	int                     rw_child_slot;
- 
- 	TimestampTz rw_crashed_at;      /* if not 0, time it last crashed */
- 
- 	int                     rw_shmem_slot;
- 
- 	bool            rw_terminate;
- 
-  	slist_node      rw_lnode;               /* list link */
-  
-  } RegisteredBgWorker;
+```
+typedef struct RegisteredBgWorker
+{
+
+      BackgroundWorker rw_worker; /* its registry entry */
+
+      struct bkend *rw_backend;       /* its BackendList entry, or NULL */
+
+      pid_t           rw_pid;                 /* 0 if not running */
+
+      int                     rw_child_slot;
+
+      TimestampTz rw_crashed_at;      /* if not 0, time it last crashed */
+
+      int                     rw_shmem_slot;
+
+      bool            rw_terminate;
+
+	slist_node      rw_lnode;               /* list link */
+
+} RegisteredBgWorker;
   ```
   
   
@@ -68,14 +68,14 @@ PostgreSQL提供了一套frame使postgres可以启动单独后台进程跑用户
   BackgroundWorkerSlot 同样是对BackgroundWorker的包装，记录pid以及是否terminate等信息
 
 ```
-  typedef struct BackgroundWorkerArray 
-  { 
-  
-          int                     total_slots; 
-  
-          BackgroundWorkerSlot slot[FLEXIBLE_ARRAY_MEMBER]; 
-  
-  } BackgroundWorkerArray; 
+typedef struct BackgroundWorkerArray 
+{ 
+
+        int                     total_slots; 
+
+        BackgroundWorkerSlot slot[FLEXIBLE_ARRAY_MEMBER]; 
+
+} BackgroundWorkerArray; 
 ```
 ```
 typedef struct BackgroundWorkerSlot
