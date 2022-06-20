@@ -6,8 +6,8 @@
   邮箱: fanfuxiaoran@gmail.com
 # 文章分类
 ## 数据库
-- [Pg client/server encoding](gp_encoding.md)
-- [Pg background worker](bgworker.md)
-- [Pg pgboucner](pgboucner.md)
+- [Postgres client/server encoding](gp_encoding.md)
+- [Postgres background worker](bgworker.md)
+- [Postgres pgboucner](pgboucner.md)
 
 文章搬运中.....
