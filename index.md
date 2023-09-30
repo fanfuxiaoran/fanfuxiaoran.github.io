@@ -7,6 +7,6 @@
 ## 数据库
 - [Postgres client/server encoding](gp_encoding.md)
 - [Postgres background worker](bgworker.md)
-- [Postgres pgboucner](pgboucner.md)
+- [Postgres pgboucner](pgbouncer.md)
 
 文章搬运中.....
