@@ -78,7 +78,8 @@ session log 和 object log 可以混合使用
 - ddl 操作
 - log_role 权限变更的操作
 - 其它：function、extension 、misc(set等)
-## Example:
+
+## Examples:
 
 ```
 CREATE TABLE tmp2 AS (SELECT * FROM tmp);
