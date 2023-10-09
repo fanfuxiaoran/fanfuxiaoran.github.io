@@ -8,5 +8,7 @@
 - [Postgres client/server encoding](gp_encoding.md)
 - [Postgres background worker](bgworker.md)
 - [Postgres pgboucner](pgbouncer.md)
+- [Postgres pgaudit 介绍](pgaudit_user_doc.md)
+
 
 文章搬运中.....
