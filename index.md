@@ -9,6 +9,7 @@
 - [Postgres background worker](bgworker.md)
 - [Postgres pgboucner](pgbouncer.md)
 - [Postgres pgaudit 介绍](pgaudit_user_doc.md)
+- [浅谈Postgres object_access_hook](object_access_hook.md)
 
 
 文章搬运中.....
