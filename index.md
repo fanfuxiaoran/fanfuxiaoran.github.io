@@ -1,8 +1,8 @@
 ## Welcome to fanfuxiaoran Pages
 
 # 自我介绍
-
-  邮箱: fanfuxiaoran@gmail.com
+热爱数据库内核，热爱开源
+邮箱: fanfuxiaoran@gmail.com
 # 文章分类
 ## 数据库
 - [Postgres client/server encoding](gp_encoding.md)
