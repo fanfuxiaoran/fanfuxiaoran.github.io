@@ -15,8 +15,9 @@ https://github.com/greenplum-db/gpdb/pull/16231
 SELECT * FROM t ORDER BY val <-> '[3,3,3]' limit 10;
 ```
 上面例子是最常见的查询向量的语句。
--	pgvector index 返回的数据是排序好的
--	需要 index 返回的数据量不大
+- pgvector index 返回的数据是排序好的
+- 需要 index 返回的数据量不大
+- 即使SQL 中没有"limit"，pgvector index scan 也只是返回部分数据（和一些guc设置有关）  
 
 根据上述描述，可见现阶段没有必要让 pgvector 支持 bitmap index。因为如果使用 bitmap index scan 还需要对数据进行重新排序。
 bitmap scan 一般用在多个单列过滤条件的情况下。
