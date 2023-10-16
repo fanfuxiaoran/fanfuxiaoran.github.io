@@ -10,6 +10,7 @@
 - [Postgres pgboucner](pgbouncer.md)
 - [Postgres pgaudit 介绍](pgaudit_user_doc.md)
 - [浅谈Postgres object_access_hook](object_access_hook.md)
+- [Greenplum AO 表支不支持index scan](gp_ao.md)
 
 
 文章搬运中.....
