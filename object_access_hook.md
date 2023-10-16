@@ -62,6 +62,7 @@ src/backend/commands/dbcommands.c
 关于 objectSubId, 可以是一个表中某一列的位置，比如 table test(a int, b int), 如果 objectSubId 是1，则表示列“a”。 目前只看到 objectSubId 用来表示某列。
 
 这里有一个坑需要注意：当 ObjectType 是 "OCLASS_DEFAULT" 时候，object->classId 是“AttrDefaultRelationId”， 但是object->objectId不是tuple OID, 是relation OID.
+
 ### 可见性问题
 
 可见性问题是使用 object_access_hook 最大的阻碍。
@@ -77,8 +78,7 @@ InvokeObjectPostAlterHook 在object更改之后, CommandCounterIncrement()之前
 使用 SnapshotSelf 会引出另外的一个问题。“getObjectIdentity” 获取 object identity 和 “getObjectTypeDescription”  获取 object type 时候都是通过 relation_open 或者　system cache 获取 catalog 表里的内容，但是 cache 里面的东西都是使用的 CalogSnapshot，CalogSnapshot 的类型是 SNAPSHOT_MVCC。(此处不理解的话可以去了解pg的cache及 snapshot 模块)， 因此如果使用 snapshotSelf 的话，不能使用 relation_open，只能自己手动设置snapshot 并调用 “systable_beginscan” 去磁盘扫描表。不使用 cache 会有一定的性能损失，但是没办法
 
 ### Delete objects有依赖问题
-
-上一部分讲到使用 sanpshot_self 解决可见性的问题，但是 snapshot_self 用在 "OAT_DROP" 的hook上就会出问题，因为存在循环依赖问题。
+objects 之间存在相互依赖关系
 例子：
 ```
     CREATE TYPE casttesttype;
@@ -104,7 +104,32 @@ InvokeObjectPostAlterHook 在object更改之后, CommandCounterIncrement()之前
     DETAIL:  drop cascades to type casttesttype
     drop cascades to function casttesttype_out(casttesttype)
 ```
-原因此处不展开细讲了
+"type casttesttype" 和 "casttesttype_in"、 "casttesttype_out" 有循环依赖问题
+
+```
+drop type casttesttype;
+ERROR:  cannot drop type casttesttype because other objects depend on it
+DETAIL:  function casttesttype_in(cstring) depends on type casttesttype
+function casttesttype_out(casttesttype) depends on type casttesttype
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+```
+```
+DROP FUNCTION casttesttype_in(cstring);
+ERROR:  cannot drop function casttesttype_in(cstring) because other objects depend on it
+DETAIL:  type casttesttype depends on function casttesttype_in(cstring)
+function casttesttype_out(casttesttype) depends on type casttesttype
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+```
+
+如果在上述 sql  ` DROP FUNCTION casttesttype_in(cstring) cascade;` 执行过程中使用object_access_hook 中获取这些objects 的信息, 类似：
+
+```
+DROP FUNCTION casttesttype_out(casttesttype);
+NOTICE:  AUDIT: SESSION,36,1,DDL,DROP FUNCTION,,,DROP FUNCTION casttesttype_out(casttesttype);,<none>,0
+```
+会遇到问题，因为我们要翻译function casttesttype_out 和 type casttesttype object的信息，但是casttesttype 在 drop "casttesttype_out" 之前已经drop了，不可见了。
+
+上一部分讲到使用 sanpshot_self 解决可见性的问题，但是 snapshot_self 用在 "OAT_DROP" 的hook上就会出问题，因为存在循环依赖问题。
 
 怎么解决该问题呢？还是通过更改 snapshot，在 drop 命令执行之前获取一个 snapshot（主要是获取commandId）,  在 object_access_hook 里使用它。
 
@@ -112,5 +137,5 @@ InvokeObjectPostAlterHook 在object更改之后, CommandCounterIncrement()之前
 
 使用 hook 的时候避免不了使用全部变量，并涉及到 memory context，因为 object_access_hook 的参数是固定的，没办法再传递其他变量。
 
-使用全局变量的时候需要注意，pg执行sql的时候会递归执行，因此一个 object_access_hook 会被多次调用(参考ProcessUtilityContext)，需要注意全局变量的修改及memory context问题。
+使用全局变量的时候需要注意，pg 执行 sql的时候会递归执行，因此一个 object_access_hook 会被多次调用(参考ProcessUtilityContext)，需要注意全局变量的修改及memory context问题。
 
