@@ -1,20 +1,21 @@
 # Greenplum AO 表支不支持 index scan
 
 https://github.com/greenplum-db/gpdb/pull/16231 
-在这个pr之前，在 Greenplum 的 AO 表上只支持使用 sequence scan , bitmap scan 和 index-only，不支持index scan. 
+
+在这个 pr 之前，在 Greenplum 的 AO 表上只支持使用 sequence scan , bitmap scan 和 index-only，不支持index scan. 
 
 ## 让 AO 表支持 pgvector index scan
 
-该pr主要是为了使 GP AO 表支持 pgvector 的 index  scan (IVFFLAT & HNSW)
+该 pr 主要是为了使 GP AO 表支持 pgvector 的 index  scan (IVFFLAT & HNSW)
 
 提出这个 pr 的原因 是 GP 想支持 pgvector，但是 pgvector 里面的两个 index : ivfflat 和 hnsw 都不支持 bitmap scan，AO 表又不支持 Index scan , 也就是没有办法在向量数据上使用上述两种索引，只能进行顺序扫描，这样 pgvector 就没用了。
 
-解释一下为什么 pgvector 的 index 不支持 bitmap scan。 pgvctor 是专门处理 vector 数据的插件，包括 vector 新类型的引入，及对应的索引用来支持 ANN SEARCH, 即查找 n 个最近的邻居，并按照距离排序返回。
+解释一下为什么 pgvector 的 index 不支持 bitmap scan。 pgvector 是专门处理 vector 数据的插件，包括 vector 新类型的引入，及对应的索引用来支持 ANN SEARCH, 即查找 n 个最近的邻居，并按照距离排序返回。
 
 ```
 SELECT * FROM t ORDER BY val <-> '[3,3,3]' limit 10;
 ```
-上面例子是最常见的查询向量的语句。
+上面是最常见的查询向量的语句。
 - pgvector index 返回的数据是排序好的
 - 需要 index 返回的数据量不大
 - 即使SQL 中没有"limit"，pgvector index scan 也只是返回部分数据（和一些guc设置有关）  
@@ -26,7 +27,9 @@ ps: 目前 pgvertor 对于属性 filter 并不支持. https://github.com/pgvecto
 
 ## 为什么AO表不支持index scan
 https://github.com/greenplum-db/gpdb/pull/16231， 
-在这个pr（支持pgvector index之前），其实已经有其它的pr 让AO表支持index scan，但是最终close了。
+
+在这个 pr（支持pgvector index之前），其实已经有其它的 pr 让 AO 表支持 index scan，但是最终 close 了。
+
 https://github.com/greenplum-db/gpdb/pull/5450 
 
 根本原因就是 AO 表的随机读性能差
