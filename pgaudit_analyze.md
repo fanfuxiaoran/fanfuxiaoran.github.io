@@ -2,7 +2,7 @@
 
 (参考 branch REL_12_STABLE)
 
-pgaudit 的介绍和使用参 [Postgres pgaudit 介绍](pgaudit_user_doc.md)
+pgaudit 的介绍和使用参考 [Postgres pgaudit 介绍](pgaudit_user_doc.md)
 
 pgaudit 就是要在 DML 过程中收集数据对象的读写信息，在DDL执行过程中收集数据对象的更改信息。
 
@@ -41,7 +41,7 @@ Whenever a ddl_command_end event trigger is installed, DDL actions
 executed are saved to a list which can be inspected during execution of
 a function attached to ddl_command_end.
 ```
-它可以捕捉一条 query 执行过程中所有 DDL events，用户可以通过实现一个 EventTrigger 来获取它们。该Trigger会在 ddl_command_end 的时候执行，返回给用户所有的 DDL events。pgåudit 中 EventTrigger 实现如下：
+它可以捕捉一条 query 执行过程中所有 DDL events，用户可以通过实现一个 EventTrigger 来获取它们。该 Trigger 会在 ddl_command_end 的时候执行，返回给用户所有的 DDL events。pgåudit 中 EventTrigger 实现如下：
 
 ```
 CREATE FUNCTION pgaudit_ddl_command_end()
@@ -56,7 +56,7 @@ CREATE EVENT TRIGGER pgaudit_ddl_command_end
         EXECUTE PROCEDURE pgaudit_ddl_command_end();
 ```
 
-其实现机制:
+DDL event collect 其实现机制:
 
 - 初始化一些状态及全区变量
 ```
@@ -68,15 +68,15 @@ EventTriggerDDLCommandStart(parsetree);
 address = DefineView((ViewStmt *) parsetree, queryString, pstmt->stmt_location, pstmt->stmt_len);
 EventTriggerCollectSimpleCommand(address, secondaryObject, parsetree);
 ```
-先DefineView, 再调用 EventTriggerCollectSimpleCommand 收集 object 信息。
+先 DefineView, 再调用 EventTriggerCollectSimpleCommand 收集 object 信息。
 
-其中的细节不展开来讲了：比如在一个command的执行过程中涉及到多个 object，为保证 object 收集到的先后顺序是正确的，EventTriggerCollectSimpleCommand 会穿插到很多地方执行。及拿到objects后对object的翻译等细节。
+其中的细节不展开来讲了：比如在一个 command 的执行过程中涉及到多个 object，为保证 object 收集到的先后顺序是正确的，EventTriggerCollectSimpleCommand 会穿插到很多地方执行。及拿到 objects 后对 object 翻译等细节。
 
-## 生成DML过程中objects 读写信息
+## 生成 DML 过程中 objects 读写信息
 
-通过hook` ExecutorCheckPerms_hook` 实现。
+通过 hook` ExecutorCheckPerms_hook` 实现。
 
-Postgres中在对object进行读写的时候都会调用该hook. 该hook的调用是在function "ExecCheckPermissions" 里面，来看一下
+Postgres 中在对 object 进行读写的时候都会调用该 hook. 该 hook 的调用是在 function "ExecCheckPermissions" 里面，来看一下
 "ExecCheckPermissions" 调用
 
 ```
@@ -86,7 +86,7 @@ src/backend/commands/copy.c
 ```
 ## 记录 object 对应的上下文
 
-由前面两个步骤可以拿到 object的类型、名称，除此之外还需要记录一些其它的 context 信息，例如对应的 sql statement, command 的类型等
+由前面两个步骤可以拿到 object 的类型、名称，除此之外还需要记录一些其它的 context 信息，例如对应的 sql statement, command 的类型等
 
 ```
 CREATE TABLE tmp2 AS (SELECT * FROM tmp);
@@ -123,7 +123,7 @@ ExecutorStart  执行过程中，是见到一个 object 便直接打印
 
 AuditItem 什么时候出栈呢？
 
-通过 MemoryContextCallBack 机制实现。每个query 执行的时候都有对应 Memory context, 把 AuditItem 的memory context挂到 query 执行的 memory context 下，当 query 执行完成时，会 reset 或者 delete memory context, 这时候调用 call back 函数出栈
+通过 MemoryContextCallResetCallbacks 实现。每个query 执行的时候都有对应 Memory context, 把 AuditItem 的memory context挂到 query 执行的 memory context 下，当 query 执行完成时，会 reset 或者 delete memory context, 这时候调用 callback 函数出栈
 
 
 
