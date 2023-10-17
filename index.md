@@ -7,7 +7,7 @@
 # 文章分类
 ## 数据库
 - [Greenplum AO 表支不支持index scan](gp_ao.md)
-- [pgaudit 源码重点解读](pgaudit_analyze .md)
+- [pgaudit 源码重点解读](pgaudit_analyze.md)
 - [浅谈Postgres object_access_hook](object_access_hook.md)
 - [Postgres pgaudit 介绍](pgaudit_user_doc.md)
 - [Postgres background worker](bgworker.md)
