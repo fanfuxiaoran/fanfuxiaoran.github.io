@@ -110,7 +110,7 @@ postmaster进程会观察BackgroundWorkerArray中的变化，并相应的改变�
   3. postmaster进程每次loop遍历BackgroundWorkerList，对于新注册bgwoker创建新进程并启动bgworker
  
 - 终止bgworker
-  1. 调用TerminateBackgroundWorker, 把对应的slot的terminate设置为false,给postmaster进程发PMSIGNAL_BACKGROUND_WORKER_CHANGE 信号
+  1. 调用TerminateBackgroundWorker, 把对应的slot的terminate设置为true,给postmaster进程发PMSIGNAL_BACKGROUND_WORKER_CHANGE 信号
 
   2. postmaster收到信号，调用BackgroundWorkerStateChange 函数,kill bgworker进程, 把worker terminate 设置为true
   
