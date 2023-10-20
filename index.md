@@ -11,6 +11,7 @@
 - [浅谈Postgres object_access_hook](object_access_hook.md)
 - [Postgres pgaudit 介绍](pgaudit_user_doc.md)
 - [Postgres background worker](bgworker.md)
+- [Postgres 实现进程池](pg_multi_process_pool.md)
 - [Postgres client/server encoding](gp_encoding.md)
 - [Postgres pgboucner](pgbouncer.md)
 
