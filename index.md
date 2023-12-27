@@ -15,4 +15,7 @@
 - [Postgres client/server encoding](gp_encoding.md)
 - [Postgres pgboucner](pgbouncer.md)
 
+## 书单
+- [技术](read_list.md)
+
 转载请注明出处
